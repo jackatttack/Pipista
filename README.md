@@ -1,33 +1,17 @@
 # Pipista
 
-A friendly, touch-first package and project manager built specifically for
+Pipista is a small package manager for
 [Pythonista](https://omz-software.com/pythonista/) on iPhone and iPad.
 
-Pipista makes useful pure-Python software accessible without requiring StaSh,
-a local `pip` command, subprocess support or a desktop computer.
+It gives you one simple place to find, install and remove Python packages from
+PyPI, or download public GitHub projects. It is aimed at people who do not want
+to set up StaSh or work from a command line.
 
-> **Status:** Pipista Public Beta 1 is being prepared. Please treat the current
-> code as pre-release software until the first tagged release is published.
+Pipista is currently a public beta.
 
-## Features
+## Install
 
-- Search the complete PyPI project index with live filtering
-- Inspect package metadata before installation
-- Install compatible universal Python wheels
-- Conservatively install suitable pure-Python source archives
-- Resolve active runtime dependencies before installation
-- Review and confirm the complete dependency plan
-- Recognise packages already available in Pythonista
-- Install public GitHub repositories as managed, editable projects
-- Track packages and projects installed through Pipista
-- Inspect the wider Pythonista package environment without modifying it
-- Open package and project pages in a web browser
-- Run in fullscreen or Pythonista panel mode
-
-## Quick installation
-
-Create a temporary Python file in Pythonista, paste the following code and run
-it once:
+Create a new Python file in Pythonista, paste this in and run it once:
 
 ```python
 from urllib.request import urlopen
@@ -40,170 +24,118 @@ source = urlopen(url).read()
 exec(compile(source, 'install_pipista.py', 'exec'))
 ```
 
-The installer downloads the repository, extracts only an explicit allowlist of
-release files, checks that every Python source file compiles, stages the new
-application and backs up an existing Pipista installation before replacing it.
+The installer creates a `Pipista` folder in your Pythonista Documents and opens
+the main launcher when it is finished.
 
-After installation, run:
-
-- `~/Documents/Pipista/Pipista.py` for fullscreen mode
-- `~/Documents/Pipista/Pipista_Panel.py` for panel mode
-
-You can also download and review
+You can also read
 [`install_pipista.py`](install_pipista.py) before running it.
 
-## Where Pipista stores things
+## Try Wikipedia
 
-All locations are calculated for the current Pythonista user:
+Open Pipista, stay on the **PyPI** tab and choose `wikipedia`.
 
-| Purpose | Location |
-| --- | --- |
-| Pipista application | `~/Documents/Pipista` |
-| Fullscreen launcher | `~/Documents/Pipista/Pipista.py` |
-| Panel launcher | `~/Documents/Pipista/Pipista_Panel.py` |
-| Pipista state and cache | `~/Documents/.pipista` |
-| Installed GitHub projects | `~/Documents/Pipista Projects` |
-| Installed Python packages | Pythonista's user `site-packages` directory |
+Tap **Inspect**, then **Install**. Pipista will show you what it plans to do
+before changing anything.
 
-Pipista does not contain hard-coded device container identifiers or paths from
-the developer's iPhone.
+You can test the installed package in a separate Pythonista file:
 
-## Using Pipista
+```python
+import wikipedia
 
-### PyPI packages
+summary = wikipedia.summary(
+    'Python (programming language)',
+    sentences=2,
+    auto_suggest=False,
+)
+print(summary)
+```
 
-1. Open the **PyPI** tab.
-2. Tap **Sync PyPI index** the first time you use Pipista.
-3. Start typing a project name.
-4. Select a result and tap **Inspect**.
-5. Review compatibility and dependency information.
-6. Tap **Install**.
-7. Confirm the dependency plan when dependencies are required.
+Wikipedia is the standard Pipista example because it is small, familiar and
+easy to check.
 
-The local PyPI index is refreshed only when you press the sync button. Pipista
-checks PyPI's serial number and avoids rebuilding the database when the cached
-index is already current.
+## Searching PyPI
 
-### GitHub projects
+Pipista can download PyPI's project-name index so you can filter the full list
+as you type. Press **Sync** the first time you want this.
 
-1. Open the **GitHub** tab.
-2. Enter `owner/repository`, or paste a public GitHub URL.
-3. Inspect the repository and requested branch or reference.
-4. Install the repository as a managed project snapshot.
+Syncing is manual. The list is only refreshed when you press **Refresh** or
+**Sync** again.
 
-GitHub projects are stored separately from packages and remain editable.
+You can still enter an exact package name and inspect it without syncing the
+full list.
 
-### Installed items
+## GitHub projects
 
-The **Managed** view contains packages and projects installed by Pipista.
-Dependency relationships are recorded so a required dependency cannot be
-removed while another managed package still needs it.
+Open the **GitHub** tab and enter:
 
-The **Environment** view is a read-only inventory of importable packages
-already available to Pythonista, including bundled and independently installed
-modules.
+`owner/repository`
 
-## Dependency handling
+You can also paste a public GitHub URL. Pipista downloads the repository as a
+managed, editable project.
 
-Pipista evaluates active runtime requirements and displays its proposed actions
-before installation.
+GitHub projects are kept separate from installed Python packages.
 
-A dependency may be:
+## Installed items
 
-- installed from PyPI;
-- recognised as already managed by Pipista;
-- recognised as already importable in Pythonista;
-- skipped because its environment marker or optional extra is inactive; or
-- blocked when Pipista cannot resolve it safely.
+The **Managed** view shows packages and projects installed through Pipista and
+lets you remove them again.
 
-Dependency installations are transactional. If one package fails, packages
-installed during that operation are rolled back.
+The **Environment** view shows other modules already available in Pythonista.
+It is read-only, so Pipista will not remove things it did not install.
 
-The optional `packaging` module provides the richest PEP 508 requirement and
-marker evaluation. Pipista has a conservative fallback for environments where
-that module is unavailable and blocks requirements it cannot interpret safely.
+Pipista also keeps track of dependencies. It installs them in the order they are
+needed and will not remove one while another managed package still depends on
+it.
 
-## Safety model
+## Where files go
 
-Pipista deliberately avoids behaving like a full desktop `pip` installation:
+- Pipista: `~/Documents/Pipista`
+- Pipista data and PyPI index: `~/Documents/.pipista`
+- GitHub projects: `~/Documents/Pipista Projects`
+- Python packages: Pythonista's user `site-packages`
 
-- PyPI downloads are verified against SHA-256 metadata
-- archive paths, links, expansion size and file counts are checked
-- `setup.py`, build backends and downloaded installer scripts are not executed
-- installations are staged before files enter `site-packages`
-- existing unmanaged files are not intentionally overwritten
-- installed imports are verified
-- dependency groups roll back together after failure
-- dependencies required by other managed packages are protected from uninstall
-- modified files are detected before removal
-- incompatible foreign binaries are omitted and reported
-- native-only packages are rejected
+These paths are worked out for the current Pythonista user. They are not tied
+to the developer's device.
 
-## Trust warning
+## Fullscreen and panel mode
 
-Installing Python software always requires trust.
+Run `Pipista.py` for fullscreen mode.
 
-Pipista does not execute package build scripts, but it verifies an installation
-by importing the installed package. Importing a package executes that package's
-Python code.
+Run `Pipista_Panel.py` to open Pipista as a Pythonista panel.
 
-Only install packages and repositories you trust.
+## A few limits
 
-## Limitations
+Pipista is intentionally more cautious than desktop `pip`.
 
-Pipista is not a replacement for a complete desktop Python environment.
+It works best with pure-Python packages. Packages that need compiled extensions,
+system tools or unsupported iOS features may not work.
 
-Packages requiring compiled extensions, unsupported native libraries, Rust,
-system commands, build tools or platform services unavailable on iOS may not
-work in Pythonista.
+Pipista checks archives, verifies PyPI downloads, avoids overwriting unmanaged
+files and rolls back dependency installs when something fails. It does not run
+downloaded build scripts such as `setup.py`.
 
-Some pure-Python projects can install successfully while individual optional
-features remain unavailable on iOS. Pipista reports omitted incompatible binary
-files where possible.
-
-Pythonista does not always provide conventional distribution metadata for its
-bundled modules. Pipista can often recognise these modules by import name, but
-their exact version may not be verifiable.
+It does import a package after installation to check that it works. Importing
+Python code executes that code, so only install packages and repositories you
+trust.
 
 ## Updating Pipista
 
-Run the quick-install snippet again. The installer stages the new copy and moves
-the current installation into:
+Run the installation snippet again.
 
-`~/Documents/.pipista/backups`
+Your existing app is moved into `~/Documents/.pipista/backups` before the new
+copy replaces it. Pipista's package records and PyPI index are kept.
 
-Pipista's package registry, PyPI index cache and managed-project information
-remain in `~/Documents/.pipista` and are not replaced with the application.
+## Uninstalling Pipista itself
 
-## Development and testing
+Delete the `~/Documents/Pipista` folder.
 
-The public repository contains the application, documentation and installer.
-Development smoke tests are maintained separately and are not included in the
-public release bundle.
-
-Current development coverage includes:
-
-- safe wheel and source-archive installation
-- PyATEMMax source installation
-- dependency planning and transactional rollback
-- a real `discord` and `discord.py` dependency installation
-- existing Pythonista `aiohttp` detection
-- metadata-only forwarding packages
-- incompatible Windows DLL omission
-- native-only package rejection
-- dependency-aware uninstall protection
-- GitHub snapshot installation and modification detection
-- fullscreen and panel presentation
-
-## Security
-
-Please read [SECURITY.md](SECURITY.md) before reporting a vulnerability.
+If you also want to remove Pipista's saved data and index, delete
+`~/Documents/.pipista`. Packages already installed into `site-packages` are not
+removed by deleting the app.
 
 ## License
 
-Pipista is released under the MIT License. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
 
-## Independence
-
-Pipista is an independent community project. It is not affiliated with PyPI,
-the Python Software Foundation, Pythonista or omz:software.
+Pipista is an independent community project and is not affiliated with
+Pythonista, PyPI or the Python Software Foundation.

@@ -6,6 +6,11 @@ import re
 
 CATALOG = [
     {
+        'name': 'wikipedia',
+        'description': 'Search Wikipedia and fetch page summaries.',
+        'status': 'tested',
+    },
+    {
         'name': 'PyATEMMax',
         'description': 'Control Blackmagic Design ATEM video switchers.',
         'status': 'tested',
