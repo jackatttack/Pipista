@@ -359,7 +359,7 @@ class PipistaApp(ui.View):
                 'compatible universal wheel or a conservative pure-Python '
                 'source installation.'
             )
-            examples = 'Try: wikipedia'
+            examples = 'Try: humanize'
             accent = CYAN
 
         make_label(

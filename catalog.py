@@ -6,6 +6,11 @@ import re
 
 CATALOG = [
     {
+        'name': 'humanize',
+        'description': 'Format numbers, dates and file sizes as friendly text.',
+        'status': 'tested',
+    },
+    {
         'name': 'wikipedia',
         'description': 'Search Wikipedia and fetch page summaries.',
         'status': 'tested',
@@ -60,11 +65,7 @@ CATALOG = [
         'description': 'Parse RSS and Atom feeds.',
         'status': 'candidate',
     },
-    {
-        'name': 'humanize',
-        'description': 'Human-friendly numbers, dates and file sizes.',
-        'status': 'candidate',
-    },
+
     {
         'name': 'Markdown',
         'description': 'Convert Markdown text into HTML.',

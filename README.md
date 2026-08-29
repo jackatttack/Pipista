@@ -30,9 +30,9 @@ the main launcher when it is finished.
 You can also read
 [`install_pipista.py`](install_pipista.py) before running it.
 
-## Try Wikipedia
+## Try humanize
 
-Open Pipista, stay on the **PyPI** tab and choose `wikipedia`.
+Open Pipista, stay on the **PyPI** tab and choose `humanize`.
 
 Tap **Inspect**, then **Install**. Pipista will show you what it plans to do
 before changing anything.
@@ -40,18 +40,16 @@ before changing anything.
 You can test the installed package in a separate Pythonista file:
 
 ```python
-import wikipedia
+import humanize
 
-summary = wikipedia.summary(
-    'Python (programming language)',
-    sentences=2,
-    auto_suggest=False,
-)
-print(summary)
+number = humanize.intcomma(1234567)
+print(number)
 ```
 
-Wikipedia is the standard Pipista example because it is small, familiar and
-easy to check.
+This should print `1,234,567`.
+
+Humanize is the standard Pipista example because it is pure Python, useful and
+easy to check without relying on another web service.
 
 ## Searching PyPI
 
