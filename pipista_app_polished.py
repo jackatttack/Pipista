@@ -182,14 +182,18 @@ class PipistaApp(BasePipistaApp):
                 result = operation()
             except BaseException as exc:
                 error_type = exc.__class__.__name__
-                error_text = '{}: {}'.format(error_type, exc)
+                error_message = str(exc)
+                error_text = '{}: {}'.format(
+                    error_type,
+                    error_message,
+                )
 
                 def deliver_error():
                     self._set_busy(False)
                     self.last_error = error_text
                     self._show_error(
                         error_type,
-                        str(exc),
+                        error_message,
                     )
 
                 ui.delay(deliver_error, 0)
