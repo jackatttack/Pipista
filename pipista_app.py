@@ -6,7 +6,6 @@ import threading
 
 import console
 import ui
-import webbrowser
 from urllib.parse import quote
 
 from github_projects import GitHubProjectManager
@@ -243,6 +242,9 @@ class PipistaApp(ui.View):
             self.status_panel.width - 40,
             30,
         )
+
+        if getattr(self, 'browser_overlay', None) is not None:
+            self._layout_browser_overlay()
 
     def _clear_content(self):
         for subview in list(self.content.subviews):
@@ -579,15 +581,144 @@ class PipistaApp(ui.View):
         )
         self._set_status('Inspection complete', 'success')
 
+    def _layout_browser_overlay(self):
+        """Size the embedded browser over the complete Pipista surface."""
+        overlay = getattr(self, 'browser_overlay', None)
+        if overlay is None:
+            return
+
+        width = self.width
+        height = self.height
+        header_height = 82
+
+        overlay.frame = (0, 0, width, height)
+
+        self.browser_header.frame = (
+            0,
+            0,
+            width,
+            header_height,
+        )
+
+        self.browser_close_button.frame = (
+            16,
+            38,
+            78,
+            34,
+        )
+
+        self.browser_title_label.frame = (
+            108,
+            38,
+            max(80, width - 124),
+            34,
+        )
+
+        self.browser_webview.frame = (
+            0,
+            header_height,
+            width,
+            max(1, height - header_height),
+        )
+
+
+    def _ensure_browser_overlay(self):
+        """
+        Create Pipista's embedded browser once and reuse it.
+
+        The WebView lives inside the existing Pipista view hierarchy. This avoids
+        Pythonista's separate browser/presentation stack, which can leave external
+        pages hidden behind fullscreen or panel presentations.
+        """
+        if getattr(self, 'browser_overlay', None) is not None:
+            return
+
+        overlay = ui.View()
+        overlay.background_color = BACKGROUND
+        overlay.hidden = True
+        overlay.flex = 'WH'
+
+        header = ui.View()
+        header.background_color = PANEL
+        overlay.add_subview(header)
+
+        close_button = make_button(
+            header,
+            'Close',
+            self._close_browser,
+            background=PANEL_ALT,
+            color=TEXT,
+        )
+
+        title_label = make_label(
+            header,
+            'Web',
+            size=15,
+            color=TEXT,
+            bold=True,
+        )
+
+        webview = ui.WebView()
+        webview.background_color = 'white'
+        webview.flex = 'WH'
+        overlay.add_subview(webview)
+
+        self.browser_overlay = overlay
+        self.browser_header = header
+        self.browser_close_button = close_button
+        self.browser_title_label = title_label
+        self.browser_webview = webview
+
+        self.add_subview(overlay)
+        self._layout_browser_overlay()
+
+
+    def _browser_title(self, url):
+        """Return a concise title for a source page."""
+        lowered = str(url or '').lower()
+
+        if 'pypi.org' in lowered:
+            return 'PyPI'
+
+        if 'github.com' in lowered:
+            return 'GitHub'
+
+        return 'Web'
+
+
+    def _show_in_app_browser(self, url):
+        """Open a source page immediately over the current Pipista screen."""
+        url = str(url or '').strip()
+
+        if not url:
+            raise ValueError('URL is required')
+
+        self._ensure_browser_overlay()
+
+        try:
+            self.end_editing()
+        except Exception:
+            pass
+
+        self.browser_title_label.text = self._browser_title(url)
+        self.browser_overlay.hidden = False
+        self._layout_browser_overlay()
+        self.browser_webview.load_url(url)
+
+
+    def _close_browser(self, sender=None):
+        """Close the embedded browser and return to the current Pipista view."""
+        overlay = getattr(self, 'browser_overlay', None)
+
+        if overlay is not None:
+            overlay.hidden = True
+
     def _open_external_url(self, url):
         try:
-            opened = webbrowser.open(url)
-            if opened is False:
-                raise RuntimeError('Pythonista could not open the URL')
-            self._set_status('Opening browser…', 'success')
+            self._show_in_app_browser(url)
         except Exception as exc:
             self._set_status(
-                'Could not open browser: {}'.format(exc),
+                'Could not open page: {}'.format(exc),
                 'error',
             )
 
