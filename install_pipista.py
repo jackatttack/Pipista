@@ -29,6 +29,8 @@ MAX_FILE_BYTES = 5 * 1024 * 1024
 
 APP_FILES = (
     'Pipista.py',
+    '_pipista_app_base.py',
+    '_pipista_frontend.py',
     'catalog.py',
     'dependency_planner.py',
     'environment_inventory.py',
