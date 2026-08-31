@@ -30,6 +30,13 @@ the main launcher when it is finished.
 You can also read
 [`install_pipista.py`](install_pipista.py) before running it.
 
+## Launching Pipista
+
+Run `Pipista.py` to launch Pipista.
+
+`pipista_app.py` contains the application interface used by the launcher. Most
+users only need to open `Pipista.py`.
+
 ## Try humanize
 
 Open Pipista, stay on the **PyPI** tab and choose `humanize`.
@@ -94,12 +101,6 @@ it.
 
 These paths are worked out for the current Pythonista user. They are not tied
 to the developer's device.
-
-## Fullscreen and panel mode
-
-Run `Pipista.py` for fullscreen mode.
-
-Run `Pipista_Panel.py` to open Pipista as a Pythonista panel.
 
 ## A few limits
 

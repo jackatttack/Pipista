@@ -29,13 +29,11 @@ MAX_FILE_BYTES = 5 * 1024 * 1024
 
 APP_FILES = (
     'Pipista.py',
-    'Pipista_Panel.py',
     'catalog.py',
     'dependency_planner.py',
     'environment_inventory.py',
     'github_projects.py',
     'pipista_app.py',
-    'pipista_app_polished.py',
     'pipista_engine.py',
     'pipista_version.py',
     'pypi_index.py',
@@ -257,8 +255,7 @@ def install():
     print('Launcher:')
     print('  ' + launcher)
     print('')
-    print('Run Pipista.py for fullscreen mode.')
-    print('Run Pipista_Panel.py for panel mode.')
+    print('Run Pipista.py to launch Pipista.')
 
     try:
         import editor
