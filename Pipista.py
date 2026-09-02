@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Pipista launcher."""
+"""Launch Pipista."""
 
-from pipista_app import main
+from pipista_core import main
 
 
 if __name__ == '__main__':

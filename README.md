@@ -18,7 +18,7 @@ from urllib.request import urlopen
 
 url = (
     'https://raw.githubusercontent.com/'
-    'jackatttack/Pipista/main/install_pipista.py'
+    'jackatttack/Pipista/main/installer/install_pipista.py'
 )
 source = urlopen(url).read()
 exec(compile(source, 'install_pipista.py', 'exec'))
@@ -28,7 +28,7 @@ The installer creates a `Pipista` folder in your Pythonista Documents and opens
 the main launcher when it is finished.
 
 You can also read
-[`install_pipista.py`](install_pipista.py) before running it.
+[`installer/install_pipista.py`](installer/install_pipista.py) before running it.
 
 ## Launching Pipista
 
@@ -134,7 +134,7 @@ removed by deleting the app.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](docs/LICENSE).
 
 Pipista is an independent community project and is not affiliated with
 Pythonista, PyPI or the Python Software Foundation.
